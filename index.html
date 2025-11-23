@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Sleep</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --background-start: 210 40% 98%;
+        --background-end: 210 40% 90%;
+        --foreground: 222.2 84% 4.9%;
+        --primary: 210 90% 50%;
+        --primary-foreground: 210 40% 98%;
+        --primary-neon: 0 0 6px hsl(var(--primary)), 0 0 10px hsl(var(--primary));
+        --card: 210 40% 96%;
+        --card-foreground: 222.2 84% 4.9%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+
+        font-family: 'Inter', sans-serif;
+      }
+
+      html.dark {
+        --background-start: 222.2 84% 4.9%;
+        --background-end: 212 80% 8%;
+        --foreground: 210 40% 98%;
+        --primary: 217 90% 60%;
+        --primary-foreground: 210 40% 98%;
+        --primary-neon: 0 0 6px hsl(var(--primary)), 0 0 10px hsl(var(--primary));
+        --card: 222.2 47.4% 11.2%;
+        --card-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+      }
+      
+      body {
+        background-color: hsl(var(--background-start));
+        color: hsl(var(--foreground));
+        background-image: linear-gradient(to bottom right, hsl(var(--background-start)), hsl(var(--background-end)));
+      }
+
+      /* Scrollbar styles */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: hsl(var(--background-end));
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--primary) / 0.5);
+        border-radius: 10px;
+        border: 2px solid hsl(var(--background-end));
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: hsl(var(--primary));
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

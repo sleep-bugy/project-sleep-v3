@@ -21,7 +21,7 @@ export const AdminLoginPage = () => {
         const user = await login(email, password);
         setIsLoading(false);
         if (user) {
-            navigate('/admin/dashboard');
+            navigate('/admin/dashboard', { replace: true });
         } else {
             setError('Invalid email or password.');
         }

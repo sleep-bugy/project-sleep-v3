@@ -1,6 +1,7 @@
 
 
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 // FIX: Import `Variants` type from framer-motion to correctly type animation variants.
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { AnimatedPage, useData, useI18n, useTheme } from '../App';
@@ -47,6 +48,7 @@ const NeonButton = ({ children, onClick, className = '', primary = false, ...pro
 // Home Page
 export const HomePage = () => {
   const { t } = useI18n();
+  const navigate = useNavigate();
   
   const animatedText = t('home_hero_title_animated').split("").map((char, index) => (
     <motion.span key={index} variants={itemVariants} className="inline-block">
@@ -80,8 +82,8 @@ export const HomePage = () => {
           </motion.h1>
           <motion.p variants={itemVariants} initial="hidden" animate="visible" transition={{delay: 0.5}} className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-hsl-foreground/80">{t('home_hero_subtitle')}</motion.p>
           <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{delay: 0.7}} className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <NeonButton primary>{t('home_hero_cta_download')}</NeonButton>
-              <NeonButton>{t('home_hero_cta_features')}</NeonButton>
+              <NeonButton primary onClick={() => navigate('/download')}>{t('home_hero_cta_download')}</NeonButton>
+              <NeonButton onClick={() => navigate('/features')}>{t('home_hero_cta_features')}</NeonButton>
           </motion.div>
         </section>
 

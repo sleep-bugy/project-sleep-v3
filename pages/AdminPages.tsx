@@ -37,8 +37,8 @@ export const AdminLoginPage = () => {
                 >
                     <h1 className="text-3xl font-bold text-center text-hsl-primary">Admin Login</h1>
                     <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required className="w-full px-4 py-3 bg-hsl-input border border-hsl-border rounded-lg focus:ring-2 focus:ring-hsl-primary focus:outline-none"/>
-                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required className="w-full px-4 py-3 bg-hsl-input border border-hsl-border rounded-lg focus:ring-2 focus:ring-hsl-primary focus:outline-none"/>
+                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required className="w-full px-4 py-3 bg-hsl-input border border-hsl-border rounded-lg text-hsl-foreground focus:ring-2 focus:ring-hsl-primary focus:outline-none placeholder:text-hsl-foreground/50"/>
+                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" required className="w-full px-4 py-3 bg-hsl-input border border-hsl-border rounded-lg text-hsl-foreground focus:ring-2 focus:ring-hsl-primary focus:outline-none placeholder:text-hsl-foreground/50"/>
                         {error && <p className="text-red-400 text-sm text-center">{error}</p>}
                         <motion.button whileHover={{scale: 1.05}} whileTap={{scale: 0.95}} type="submit" disabled={isLoading} className="w-full py-3 font-semibold bg-hsl-primary text-hsl-primary-foreground rounded-lg transition-colors hover:bg-opacity-90 disabled:bg-opacity-50">
                             {isLoading ? 'Logging in...' : 'Login'}
@@ -67,6 +67,9 @@ export const AdminDashboardPage = () => {
     const [editingDevice, setEditingDevice] = useState<Device | null>(null);
     const [editingRom, setEditingRom] = useState<ROM | null>(null);
 
+    const formControlClasses = "w-full bg-hsl-input p-2 rounded border border-hsl-border text-hsl-foreground focus:ring-2 focus:ring-hsl-primary focus:outline-none placeholder:text-hsl-foreground/50";
+    const checkboxClasses = "h-4 w-4 rounded bg-hsl-input border-hsl-border text-hsl-primary focus:ring-hsl-primary";
+
     const handleDeviceSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -74,9 +77,10 @@ export const AdminDashboardPage = () => {
         if(editingDevice) {
             updateDevice({...editingDevice, ...deviceData});
         } else {
-            addDevice({...deviceData, imageUrl: 'https://picsum.photos/400/300'});
+            addDevice({...deviceData, imageUrl: `https://picsum.photos/seed/${deviceData.codename}/400/300`});
         }
         setEditingDevice(null);
+        e.currentTarget.reset();
     };
 
      const handleRomSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -93,6 +97,7 @@ export const AdminDashboardPage = () => {
             addRom(romData);
         }
         setEditingRom(null);
+        e.currentTarget.reset();
     };
 
 
@@ -104,10 +109,10 @@ export const AdminDashboardPage = () => {
                         <h2 className="text-2xl font-bold mb-4">Manage Devices ({devices.length})</h2>
                         <form onSubmit={handleDeviceSubmit} className="p-4 bg-hsl-card border border-hsl-border rounded-lg mb-6 grid grid-cols-2 gap-4">
                             <h3 className="col-span-2 text-lg font-semibold">{editingDevice ? `Editing ${editingDevice.model}` : 'Add New Device'}</h3>
-                            <input name="brand" defaultValue={editingDevice?.brand} placeholder="Brand" required className="bg-hsl-input p-2 rounded" />
-                            <input name="model" defaultValue={editingDevice?.model} placeholder="Model" required className="bg-hsl-input p-2 rounded" />
-                            <input name="codename" defaultValue={editingDevice?.codename} placeholder="Codename" required className="bg-hsl-input p-2 rounded" />
-                            <input name="chipset" defaultValue={editingDevice?.chipset} placeholder="Chipset" required className="bg-hsl-input p-2 rounded" />
+                            <input name="brand" defaultValue={editingDevice?.brand} placeholder="Brand" required className={formControlClasses} />
+                            <input name="model" defaultValue={editingDevice?.model} placeholder="Model" required className={formControlClasses} />
+                            <input name="codename" defaultValue={editingDevice?.codename} placeholder="Codename" required className={formControlClasses} />
+                            <input name="chipset" defaultValue={editingDevice?.chipset} placeholder="Chipset" required className={formControlClasses} />
                             <div className="col-span-2 flex gap-2">
                                 <button type="submit" className="px-4 py-2 bg-hsl-primary rounded">{editingDevice ? 'Update' : 'Add'}</button>
                                 {editingDevice && <button onClick={() => setEditingDevice(null)} type="button" className="px-4 py-2 bg-hsl-border rounded">Cancel</button>}
@@ -124,19 +129,22 @@ export const AdminDashboardPage = () => {
                         <h2 className="text-2xl font-bold mb-4">Manage ROMs ({roms.length})</h2>
                         <form onSubmit={handleRomSubmit} className="p-4 bg-hsl-card border border-hsl-border rounded-lg mb-6 grid grid-cols-2 gap-4">
                              <h3 className="col-span-2 text-lg font-semibold">{editingRom ? `Editing ${editingRom.type} ${editingRom.version}` : 'Add New ROM'}</h3>
-                             <select name="deviceId" defaultValue={editingRom?.deviceId} required className="bg-hsl-input p-2 rounded">
+                             <select name="deviceId" defaultValue={editingRom?.deviceId} required className={formControlClasses}>
+                                <option value="" disabled>Select a device</option>
                                 {devices.map(d => <option key={d.id} value={d.id}>{d.brand} {d.model}</option>)}
                              </select>
-                             <select name="type" defaultValue={editingRom?.type} required className="bg-hsl-input p-2 rounded">
+                             <select name="type" defaultValue={editingRom?.type} required className={formControlClasses}>
+                                <option value="" disabled>Select ROM Type</option>
                                 {(['SleepOS', 'AOSP', 'Port'] as RomType[]).map(t => <option key={t} value={t}>{t}</option>)}
                              </select>
-                             <input name="version" defaultValue={editingRom?.version} placeholder="Version" required className="bg-hsl-input p-2 rounded" />
-                             <input name="androidVersion" defaultValue={editingRom?.androidVersion} placeholder="Android Version" required className="bg-hsl-input p-2 rounded" />
-                             <input name="fileSize" defaultValue={editingRom?.fileSize} placeholder="File Size" required className="bg-hsl-input p-2 rounded" />
-                             <input name="releaseDate" defaultValue={editingRom?.releaseDate} type="date" required className="bg-hsl-input p-2 rounded"/>
-                             <textarea name="changelog" defaultValue={editingRom?.changelog} placeholder="Changelog" required className="col-span-2 bg-hsl-input p-2 rounded"></textarea>
-                             <textarea name="notes" defaultValue={editingRom?.notes} placeholder="Notes" required className="col-span-2 bg-hsl-input p-2 rounded"></textarea>
-                             <div className="flex items-center gap-2"><input defaultChecked={editingRom?.isRecommended} type="checkbox" name="isRecommended" id="isRecommended" className="bg-hsl-input" /><label htmlFor="isRecommended">Is Recommended?</label></div>
+                             <input name="version" defaultValue={editingRom?.version} placeholder="Version" required className={formControlClasses} />
+                             <input name="androidVersion" defaultValue={editingRom?.androidVersion} placeholder="Android Version" required className={formControlClasses} />
+                             <input name="fileSize" defaultValue={editingRom?.fileSize} placeholder="File Size" required className={formControlClasses} />
+                             <input name="downloadUrl" defaultValue={editingRom?.downloadUrl} placeholder="Download URL" type="url" required className={formControlClasses} />
+                             <input name="releaseDate" defaultValue={editingRom?.releaseDate} type="date" required className={formControlClasses}/>
+                             <textarea name="changelog" defaultValue={editingRom?.changelog} placeholder="Changelog" required rows={3} className={`col-span-2 ${formControlClasses}`}></textarea>
+                             <textarea name="notes" defaultValue={editingRom?.notes} placeholder="Notes" required rows={3} className={`col-span-2 ${formControlClasses}`}></textarea>
+                             <div className="flex items-center gap-2"><input defaultChecked={editingRom?.isRecommended} type="checkbox" name="isRecommended" id="isRecommended" className={checkboxClasses} /><label htmlFor="isRecommended">Is Recommended?</label></div>
                              <div className="col-span-2 flex gap-2">
                                 <button type="submit" className="px-4 py-2 bg-hsl-primary rounded">{editingRom ? 'Update' : 'Add'}</button>
                                 {editingRom && <button onClick={() => setEditingRom(null)} type="button" className="px-4 py-2 bg-hsl-border rounded">Cancel</button>}
